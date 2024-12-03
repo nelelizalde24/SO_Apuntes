@@ -44,6 +44,9 @@ return 0;
 }
 ```
 
+![codigo ejecutado](img/holamundo.png)
+
+
 ### Proceso 1
 
 ```c
@@ -70,6 +73,8 @@ int main() {
     
 }
 ```
+![codigo ejecutado](img/proceso1.png)
+
 
 ### Cola de Prioridad 
 
@@ -167,6 +172,9 @@ int main() {
     return 0;
 }
 ```
+![codigo ejecutado](img/colaprioridad.png)
+
+
 
 ### Funciones Recursiva
 
@@ -252,6 +260,8 @@ int main() {
 }
 
 ```
+
+![codigo ejecutado](img/funcionesrecursivas.png)
 
 ### Hilos 
 
@@ -354,6 +364,8 @@ int main() {
 
 ```
 
+![codigo ejecutado](img/hilos.png)
+
 ### Peterson Consumidor
 
 ```c 
@@ -445,6 +457,8 @@ int main() {
 
 ```
 
+![codigo ejecutado](img/petersonConsumidor.png)
+
 ### Punteros con Islas 
 
 ```c
@@ -507,6 +521,8 @@ int main() {
 }
 
 ```
+
+![codigo ejecutado](img/islas.png)
 
 ### Simulacion de Particiones 
 
@@ -632,6 +648,8 @@ int main() {
 }
 
 ```
+![codigo ejecutado](img/pasrticionesSimulacion.png)
+
 ---
 ### Actividad 
 
