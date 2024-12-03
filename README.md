@@ -2,6 +2,18 @@
 
 [Repositorio](https://github.com/nelelizalde24/SO_Apuntes.git)
 
+## Índice
+
+- [Mi Repositorio](#mi-repositorio)
+  - [Índice](#índice)
+    - [Hola Mundo](#hola-mundo)
+    - [Proceso 1](#proceso-1)
+    - [Cola de Prioridad](#cola-de-prioridad)
+    - [Funciones Recursiva](#funciones-recursiva)
+    - [Hilos](#hilos)
+    - [Peterson Consumidor](#peterson-consumidor)
+    - [Punteros con Islas](#punteros-con-islas)
+    - [Simulacion de Particiones](#simulacion-de-particiones)
 
 ### Hola Mundo 
 
@@ -28,7 +40,7 @@ return 0;
 }
 ```
 
-### Procesos 1
+### Proceso 1
 
 ```c
 #include <stdio.h>
