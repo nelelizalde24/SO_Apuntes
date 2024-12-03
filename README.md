@@ -1,6 +1,6 @@
 # Mi Repositorio 
 
-[Repositorio](https://github.com/nelelizalde24/SO_Apuntes.git)
+[Repositorio en GitHub](https://github.com/nelelizalde24/SO_Apuntes.git)
 
 ## Índice
 
@@ -14,6 +14,10 @@
     - [Peterson Consumidor](#peterson-consumidor)
     - [Punteros con Islas](#punteros-con-islas)
     - [Simulacion de Particiones](#simulacion-de-particiones)
+    - [Actividad](#actividad)
+      - [**OBJETIVO**](#objetivo)
+      - [**¿Qué se espera de ti?**](#qué-se-espera-de-ti)
+      - [**Administración de Memoria**](#administración-de-memoria)
 
 ### Hola Mundo 
 
@@ -628,3 +632,116 @@ int main() {
 }
 
 ```
+---
+### Actividad 
+
+#### **OBJETIVO**
+
+El objetivo de estas actividades es fortalecer tu comprensión de dos áreas
+fundamentales en sistemas operativos: la administración de memoria y la
+administración de entrada/salida (E/S). Estos conceptos son esenciales para
+entender cómo un sistema operativo gestiona los recursos de hardware y soft-
+ware para garantizar el funcionamiento eficiente de un equipo de cómputo.
+
+
+#### **¿Qué se espera de ti?**
+
+1. **Lectura y análisis crítico:**
+
+   1.1 Antes de comenzar las actividades, revisa los temas relacionados
+   en tu material de estudio o en recursos confiables. Asegúrate
+   de comprender los conceptos clave, como memoria virtual, pagi-
+   nación, dispositivos de bloque y planificación de discos.
+
+   1.2 Reflexiona sobre cómo estos conceptos son aplicados en sistemas
+   operativos modernos como Linux o Windows.
+
+2. **Desarrollo práctico:**
+
+    2.1 Implementarás programas en lenguajes como C o Python para
+    simular y profundizar en los mecanismos estudiados. Esto in-
+    cluye la creación de algoritmos de administración de memoria y
+    simuladores de entrada/salida.
+
+    2.2 Al realizar estas tareas, te familiarizarás con técnicas de pro-
+    gramación orientadas a sistemas, como el manejo de memoria
+    dinámica, la gestión de interrupciones y la planificación de recur-
+    sos.
+
+3. **Resolución de problemas:**
+
+    3.1 Las actividades incluyen preguntas teóricas y prácticas diseñadas
+    para retarte a analizar problemas reales y proponer soluciones
+    innovadoras.
+
+    3.2 Se espera que simules entornos de sistemas operativos y explores
+    cómo interactúan sus componentes clave.
+
+
+#### **Administración de Memoria**
+
+1. **Política y filosofía**
+   
+    1.1 ¿Cuál es la diferencia entre fragmentación interna y    externa? Explica
+    cómo cada una afecta el rendimiento de la memoria.
+
+       Respuesta : 
+
+    1.2 Investiga y explica las políticas de reemplazo de páginas en sistemas
+    operativos. ¿Cuál consideras más eficiente y por qué?
+
+       Respuesta : 
+
+2. **Memoria real**
+   
+    2.1 Escribe un programa en C o Python que simule la administración de
+    memoria mediante particiones fijas.
+
+       Respuesta : 
+
+
+    2.2 Diseña un algoritmo para calcular qué procesos pueden ser asignados
+    a un sistema con memoria real limitada utilizando el algoritmo de
+    "primera cabida".
+
+       Respuesta : 
+
+3. **Organización de memoria virtual**
+   
+    3.1 Investiga y explica el concepto de "paginación" y "segmentación".
+    ¿Cuáles son las ventajas y desventajas de cada técnica?
+
+       Respuesta : 
+
+
+    3.2 Escribe un programa que simule una tabla de páginas para procesos
+    con acceso aleatorio a memoria virtual.
+
+       Respuesta : 
+
+4. **Administración de memoria virtual**    
+
+    
+    4.1 IEscribe un código que implemente el algoritmo de reemplazo de página
+    "Least Recently Used" (LRU).
+
+        Respuesta : 
+
+
+    4.2 Diseña un diagrama que represente el proceso de traducción de direc-
+    ciones virtuales a físicas en un sistema con memoria virtual.
+
+        Respuesta :
+
+**Integración**
+
+ 1. Analiza un sistema operativo moderno (por ejemplo, Linux o Windows) e identifica cómo administra la memoria virtual.
+
+        Respuesta :
+
+
+
+
+ 2. Realiza una simulación en cualquier lenguaje de programación que emule el swapping de procesos en memoria virtual.
+        
+        Respuesta :
