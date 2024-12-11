@@ -20,6 +20,14 @@
       - [**Administración de Memoria**](#administración-de-memoria)
       - [**Administración de Entrada/Salida**](#administración-de-entradasalida)
     - [Actividades: Dispositivos de entrada y salida en Linux](#actividades-dispositivos-de-entrada-y-salida-en-linux)
+    - [Comandos de Entrada y Salida, Discos y Archivos](#comandos-de-entrada-y-salida-discos-y-archivos)
+      - [**Ejercicio 1: Montar y Desmontar Discos**](#ejercicio-1-montar-y-desmontar-discos)
+      - [**Ejercicio 2: Redirección de Entrada y Salida**](#ejercicio-2-redirección-de-entrada-y-salida)
+      - [**Ejercicio 3: Copiar y Mover Archivos**](#ejercicio-3-copiar-y-mover-archivos)
+      - [**Ejercicio 4: Comprimir y Descomprimir Archivos**](#ejercicio-4-comprimir-y-descomprimir-archivos)
+      - [**Ejercicio 5: Permisos y Propiedades de Archivos**](#ejercicio-5-permisos-y-propiedades-de-archivos)
+      - [**Ejercicio 6: Exploración de Dispositivos**](#ejercicio-6-exploración-de-dispositivos)
+      - [**Ejercicio 7: Crear y Formatear Particiones**](#ejercicio-7-crear-y-formatear-particiones)
 
 ### Hola Mundo 
 
@@ -951,5 +959,369 @@ Analizar la importancia del manejo de dispositivos en sistemas Linux.
         - ¿Qué comando encontró más útil y por qué?
         - ¿Qué tan importante es conocer los dispositivos conectados al sistema?
         - ¿Cómo podrían estos conocimientos aplicarse en la administración de sistemas?
+
+---
+
+
+### Comandos de Entrada y Salida, Discos y Archivos
+#### **Ejercicio 1: Montar y Desmontar Discos**
+
+Objetivo: Aprender a montar y desmontar un dispositivo externo.
+    Inserta una memoria USB en el sistema.
+
+ Encuentra el dispositivo usando el comando:
+
+          lsblk
+
+o
+
+          fdisk -l
+
+Monta la memoria USB en un directorio, por ejemplo, `/mnt/usb`:
+
+          sudo mount /dev/sdX1 /mnt/usb
+
+Verifica que esté montado correctamente:
+
+          df -h
+
+Copia un archivo desde tu directorio personal al dispositivo USB:
+
+          cp archivo.txt /mnt/usb/
+
+Desmonta la memoria USB:
+
+          sudo umount /mnt/usb
+
+***RESULTADO***
+
+`nelosn@nelosn-lenovo:~$ lsblk`
+
+    NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
+    loop0    7:0    0     4K  1 loop /snap/bare/5
+    loop1    7:1    0  73,9M  1 loop /snap/core22/1663
+    loop2    7:2    0  73,9M  1 loop /snap/core22/1722
+    loop3    7:3    0 270,7M  1 loop /snap/firefox/4259
+    loop4    7:4    0   273M  1 loop /snap/firefox/5273
+    loop5    7:5    0  10,7M  1 loop /snap/firmware-updater/127
+    loop6    7:6    0  11,1M  1 loop /snap/firmware-updater/147
+    loop7    7:7    0   497M  1 loop /snap/gnome-42-2204/141
+    loop8    7:8    0 505,1M  1 loop /snap/gnome-42-2204/176
+    loop9    7:9    0  91,7M  1 loop /snap/gtk-common-themes/1535
+    loop10   7:10   0  12,2M  1 loop /snap/snap-store/1216
+    loop11   7:11   0  10,7M  1 loop /snap/snap-store/1218
+    loop12   7:12   0  38,8M  1 loop /snap/snapd/21759
+    loop13   7:13   0  44,3M  1 loop /snap/snapd/23258
+    loop14   7:14   0   476K  1 loop /snap/snapd-desktop-integration/157
+    loop15   7:15   0   568K  1 loop /snap/snapd-desktop-integration/253
+    sda      8:0    0    25G  0 disk 
+    ├─sda1   8:1    0     1M  0 part 
+    └─sda2   8:2    0    25G  0 part /var/snap/firefox/common/host-hunspell
+                                    /
+    sdb      8:16   1  14,5G  0 disk 
+    └─sdb1   8:17   1  14,5G  0 part /media/nelosn/ESD-ISO
+    sr0     11:0    1  1024M  0 rom  
+`nelosn@nelosn-lenovo:~$ sudo mount /dev/sdb1 /mnt/usb`
+
+`nelosn@nelosn-lenovo:~$ df -h`
+
+    S.ficheros     Tamaño Usados  Disp Uso% Montado en
+    tmpfs            391M   1,7M  390M   1% /run
+    /dev/sda2         25G    14G  9,9G  58% /
+    tmpfs            2,0G    28M  1,9G   2% /dev/shm
+    tmpfs            5,0M   8,0K  5,0M   1% /run/lock
+    tmpfs            391M   140K  391M   1% /run/user/1000
+    /dev/sdb1         15G   7,3G  7,4G  50% /mnt/usb
+`nelosn@nelosn-lenovo:~$ cp archivo.txt /mnt/usb/`
+
+`nelosn@nelosn-lenovo:~$ sudo umount /mnt/usb`
+
+`nelosn@nelosn-lenovo:~$`
+
+
+#### **Ejercicio 2: Redirección de Entrada y Salida**
+
+Objetivo: Usar redirección para guardar la salida de comandos en archivos.
+
+Lista los archivos de tu directorio actual y guarda el resultado en un archivo `listado.txt`:
+
+          ls -l > listado.txt
+
+Muestra el contenido del archivo en la terminal:
+
+          cat listado.txt
+
+Añade la fecha actual al final del archivo:
+
+          date >> listado.txt
+
+Muestra todo el contenido del archivo nuevamente:
+
+          cat listado.txt
+
+
+***RESULTADO***
+
+`nelosn@nelosn-lenovo:~$ ls -l > listado.txt`
+
+`nelosn@nelosn-lenovo:~$ cat listado.txt`
+
+    total 36
+    -rw-rw-r-- 1 nelosn nelosn    0 dic 10 23:57 archivo.txt
+    drwxr-xr-x 2 nelosn nelosn 4096 dic  1 22:42 Descargas
+    drwxr-xr-x 4 nelosn nelosn 4096 dic  3 17:18 Documentos
+    drwxr-xr-x 2 nelosn nelosn 4096 mar 19  2024 Escritorio
+    drwxr-xr-x 3 nelosn nelosn 4096 dic  3 17:17 Imágenes
+    -rw-rw-r-- 1 nelosn nelosn    0 dic 11 00:22 listado.txt
+    drwxr-xr-x 2 nelosn nelosn 4096 mar 19  2024 Música
+    drwxr-xr-x 2 nelosn nelosn 4096 mar 19  2024 Plantillas
+    drwxr-xr-x 2 nelosn nelosn 4096 mar 19  2024 Público
+    drwx------ 6 nelosn nelosn 4096 dic  1 22:08 snap
+    drwxr-xr-x 2 nelosn nelosn 4096 mar 19  2024 Vídeos
+
+`nelosn@nelosn-lenovo:~$ date >> listado.txt`
+
+`nelosn@nelosn-lenovo:~$ cat listado.txt`
+
+    total 36
+    -rw-rw-r-- 1 nelosn nelosn    0 dic 10 23:57 archivo.txt
+    drwxr-xr-x 2 nelosn nelosn 4096 dic  1 22:42 Descargas
+    drwxr-xr-x 4 nelosn nelosn 4096 dic  3 17:18 Documentos
+    drwxr-xr-x 2 nelosn nelosn 4096 mar 19  2024 Escritorio
+    drwxr-xr-x 3 nelosn nelosn 4096 dic  3 17:17 Imágenes
+    -rw-rw-r-- 1 nelosn nelosn    0 dic 11 00:22 listado.txt
+    drwxr-xr-x 2 nelosn nelosn 4096 mar 19  2024 Música
+    drwxr-xr-x 2 nelosn nelosn 4096 mar 19  2024 Plantillas
+    drwxr-xr-x 2 nelosn nelosn 4096 mar 19  2024 Público
+    drwx------ 6 nelosn nelosn 4096 dic  1 22:08 snap
+    drwxr-xr-x 2 nelosn nelosn 4096 mar 19  2024 Vídeos
+    mié 11 dic 2024 00:23:21 CST
+
+`nelosn@nelosn-lenovo:~$ `
+
+
+#### **Ejercicio 3: Copiar y Mover Archivos**
+
+Objetivo: Practicar copiar y mover archivos y directorios.
+
+Crea un archivo de texto llamado `archivo1.txt`:
+
+          echo "Este es un archivo de prueba" > archivo1.txt
+
+Copia este archivo a otro directorio, por ejemplo, `/tmp`:
+
+          cp archivo1.txt /tmp/
+
+Renombra el archivo copiado a `archivo2.txt` en `/tmp`:
+
+          mv /tmp/archivo1.txt /tmp/archivo2.txt
+
+Mueve el archivo `archivo2.txt` de vuelta a tu directorio actual:
+
+          mv /tmp/archivo2.txt .
+
+***RESULTADO***
+
+`nelosn@nelosn-lenovo:~$ echo "Este es un archivo de prueba" > archivo1.txt`
+
+`nelosn@nelosn-lenovo:~$ cp archivo1.txt /tmp/`
+
+`nelosn@nelosn-lenovo:~$ mv /tmp/archivo1.txt /tmp/archivo2.txt`
+
+`nelosn@nelosn-lenovo:~$ mv /tmp/archivo2.txt .`
+
+`nelosn@nelosn-lenovo:~$ `
+
+![resultado ejerciico 3](img/ejercicio3.png)
+
+
+#### **Ejercicio 4: Comprimir y Descomprimir Archivos**
+
+Objetivo: Aprender a trabajar con compresión de archivos. 
+
+Crea un directorio llamado `backup` y copia algunos archivos en él. 
+
+Comprime el directorio `backup` en un archivo `.tar.gz`:
+
+          tar -czvf backup.tar.gz backup/
+
+Borra el directorio original y extrae el contenido del archivo comprimido:
+
+          tar -xzvf backup.tar.gz
+
+***RESULTADO***
+
+`nelosn@nelosn-lenovo:~$ mkdir backup` "Creo el directorio"
+
+`nelosn@nelosn-lenovo:~$ ls` "Veo que se creo"
+
+    archivo1.txt  archivo.txt  Descargas   Escritorio  listado.txt  Plantillas  snap
+    archivo2.txt  backup       Documentos  Imágenes    Música       Público     Vídeos
+
+`nelosn@nelosn-lenovo:~$ cp -r /home/nelosn/Documentos/SO backup/` "Copio unos harchivos"
+
+`nelosn@nelosn-lenovo:~$ ls backup/` "Veo que ya tengo los harchivos en el directorio"
+    SO
+
+`nelosn@nelosn-lenovo:~$ tar -czvf backup.tar.gz backup/` "Comprimo el directorio"
+
+    backup/
+    backup/SO/
+    backup/SO/tarea2/
+    backup/SO/tarea2/planificadores2
+    backup/SO/tarea2/planificadores1.c
+    backup/SO/tarea2/planificadores7
+    backup/SO/tarea2/planificadores5
+    backup/SO/tarea2/planificadores3
+    backup/SO/tarea2/planificadores6.c
+    backup/SO/tarea2/planificadores1
+    backup/SO/tarea2/planificadores7.c
+    backup/SO/tarea2/planificadores2.c
+    backup/SO/tarea2/planificadores4
+    backup/SO/tarea2/planificadores3.c
+    backup/SO/tarea2/planificadores4.c
+    backup/SO/tarea2/planificadores6
+    backup/SO/tarea2/planificadores5.c
+    backup/SO/tarea2/planificadores
+    backup/SO/matrix.c
+    backup/SO/Proceso4
+    backup/SO/Proceso4.c
+    backup/SO/matrix
+    backup/SO/tarea1/
+    backup/SO/tarea1/ejercicio3.c
+    backup/SO/tarea1/ejercicio4
+    backup/SO/tarea1/ejercicio8
+    backup/SO/tarea1/ejercicio2.c
+    backup/SO/tarea1/ejercicio4.c
+    backup/SO/tarea1/ejercicio8.c
+    backup/SO/tarea1/ejercicio1.c
+    backup/SO/tarea1/ejercicio6
+    backup/SO/tarea1/ejercicio7
+    backup/SO/tarea1/ejercicio7.c
+    backup/SO/tarea1/ejercicio5
+    backup/SO/tarea1/ejercicio1
+    backup/SO/tarea1/ejercicio3
+    backup/SO/tarea1/ejercicio2
+    backup/SO/tarea1/ejercicio6.c
+    backup/SO/tarea1/programa
+    backup/SO/tarea1/ejercicio5.c
+
+`nelosn@nelosn-lenovo:~$ ls`"Veo que ya me aparece el directorio comprimido"
+
+    archivo1.txt  backup         Documentos  listado.txt  Público
+    archivo2.txt  backup.tar.gz  Escritorio  Música       snap
+    archivo.txt   Descargas      Imágenes    Plantillas   Vídeos
+
+`nelosn@nelosn-lenovo:~$ rm -r backup/`"Borro el directorio original"
+
+`nelosn@nelosn-lenovo:~$ ls` "Veo que ya no esta"
+
+    archivo1.txt  archivo.txt    Descargas   Escritorio  listado.txt  Plantillas  snap
+    archivo2.txt  backup.tar.gz  Documentos  Imágenes    Música       Público     Vídeos
+
+`nelosn@nelosn-lenovo:~$ tar -xzvf backup.tar.gz` "Descomprimo el directorio que esta comprimido"
+
+    backup/
+    backup/SO/
+    backup/SO/tarea2/
+    backup/SO/tarea2/planificadores2
+    backup/SO/tarea2/planificadores1.c
+    backup/SO/tarea2/planificadores7
+    backup/SO/tarea2/planificadores5
+    backup/SO/tarea2/planificadores3
+    backup/SO/tarea2/planificadores6.c
+    backup/SO/tarea2/planificadores1
+    backup/SO/tarea2/planificadores7.c
+    backup/SO/tarea2/planificadores2.c
+    backup/SO/tarea2/planificadores4
+    backup/SO/tarea2/planificadores3.c
+    backup/SO/tarea2/planificadores4.c
+    backup/SO/tarea2/planificadores6
+    backup/SO/tarea2/planificadores5.c
+    backup/SO/tarea2/planificadores
+    backup/SO/matrix.c
+    backup/SO/Proceso4
+    backup/SO/Proceso4.c
+    backup/SO/matrix
+    backup/SO/tarea1/
+    backup/SO/tarea1/ejercicio3.c
+    backup/SO/tarea1/ejercicio4
+    backup/SO/tarea1/ejercicio8
+    backup/SO/tarea1/ejercicio2.c
+    backup/SO/tarea1/ejercicio4.c
+    backup/SO/tarea1/ejercicio8.c
+    backup/SO/tarea1/ejercicio1.c
+    backup/SO/tarea1/ejercicio6
+    backup/SO/tarea1/ejercicio7
+    backup/SO/tarea1/ejercicio7.c
+    backup/SO/tarea1/ejercicio5
+    backup/SO/tarea1/ejercicio1
+    backup/SO/tarea1/ejercicio3
+    backup/SO/tarea1/ejercicio2
+    backup/SO/tarea1/ejercicio6.c
+    backup/SO/tarea1/programa
+    backup/SO/tarea1/ejercicio5.c
+
+`nelosn@nelosn-lenovo:~$ ls` "Veo que ya aparece el directorio descomrpimido"
+
+    archivo1.txt  backup         Documentos  listado.txt  Público
+    archivo2.txt  backup.tar.gz  Escritorio  Música       snap
+    archivo.txt   Descargas      Imágenes    Plantillas   Vídeos
+
+`nelosn@nelosn-lenovo:~$ `
+
+
+#### **Ejercicio 5: Permisos y Propiedades de Archivos**
+
+Objetivo: Aprender a modificar permisos y propietarios de archivos.
+
+Crea un archivo llamado `privado.txt`:
+
+          touch privado.txt
+
+Cambia los permisos del archivo para que solo el propietario pueda leer y escribir:
+
+          chmod 600 privado.txt
+
+Cambia el propietario del archivo a otro usuario (si tienes privilegios):
+
+          sudo chown usuario privado.txt
+
+#### **Ejercicio 6: Exploración de Dispositivos**
+
+Objetivo: Identificar discos y particiones en el sistema.
+
+Usa `lsblk` para listar los discos y particiones:
+
+          lsblk
+
+Usa `du -sh` para ver el tamaño del contenido en un directorio de tu elección:
+
+          du -sh /ruta/directorio
+
+Verifica el uso de disco con `df -h`:
+
+          df -h
+
+#### **Ejercicio 7: Crear y Formatear Particiones**
+
+Objetivo: Crear y formatear una nueva partición (Usar disco de práctica o máquina virtual).
+
+Identifica un disco no particionado:
+
+          sudo fdisk -l
+
+Usa `fdisk` para crear una nueva partición:
+
+          sudo fdisk /dev/sdX
+
+Formatea la partición como `ext4`:
+
+          sudo mkfs.ext4 /dev/sdX1
+
+Monta la partición en un directorio y prueba escribiendo archivos en ella:
+
+          sudo mount /dev/sdX1 /mnt/nueva_particion
+          echo "Prueba de escritura" > /mnt/nueva_particion/test.txt
 
 
