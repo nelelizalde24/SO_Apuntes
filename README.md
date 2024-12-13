@@ -14,6 +14,7 @@
     - [Peterson Consumidor](#peterson-consumidor)
     - [Punteros con Islas](#punteros-con-islas)
     - [Simulacion de Particiones](#simulacion-de-particiones)
+    - [Problema de los Filósofos](#problema-de-los-filósofos)
     - [Actividad](#actividad)
       - [**OBJETIVO**](#objetivo)
       - [**¿Qué se espera de ti?**](#qué-se-espera-de-ti)
@@ -21,13 +22,6 @@
       - [**Administración de Entrada/Salida**](#administración-de-entradasalida)
     - [Actividades: Dispositivos de entrada y salida en Linux](#actividades-dispositivos-de-entrada-y-salida-en-linux)
     - [Comandos de Entrada y Salida, Discos y Archivos](#comandos-de-entrada-y-salida-discos-y-archivos)
-      - [**Ejercicio 1: Montar y Desmontar Discos**](#ejercicio-1-montar-y-desmontar-discos)
-      - [**Ejercicio 2: Redirección de Entrada y Salida**](#ejercicio-2-redirección-de-entrada-y-salida)
-      - [**Ejercicio 3: Copiar y Mover Archivos**](#ejercicio-3-copiar-y-mover-archivos)
-      - [**Ejercicio 4: Comprimir y Descomprimir Archivos**](#ejercicio-4-comprimir-y-descomprimir-archivos)
-      - [**Ejercicio 5: Permisos y Propiedades de Archivos**](#ejercicio-5-permisos-y-propiedades-de-archivos)
-      - [**Ejercicio 6: Exploración de Dispositivos**](#ejercicio-6-exploración-de-dispositivos)
-      - [**Ejercicio 7: Crear y Formatear Particiones**](#ejercicio-7-crear-y-formatear-particiones)
 
 ### Hola Mundo 
 
@@ -664,6 +658,16 @@ int main() {
 ![codigo ejecutado](img/pasrticionesSimulacion.png)
 
 ---
+
+### Problema de los Filósofos
+
+
+
+Cinco filósofos se sientan alrededor de una mesa y pasan su vida cenando y pensando. Cada filósofo tiene un plato de fideos y un tenedor a la izquierda de su plato. Para comer los fideos son necesarios dos tenedores y cada filósofo sólo puede tomar los que están a su izquierda y derecha. Si cualquier filósofo toma un tenedor y el otro está ocupado, se quedará esperando, con el tenedor en la mano, hasta que pueda tomar el otro tenedor, para luego empezar a comer. Si dos filósofos adyacentes intentan tomar el mismo tenedor a una vez, se produce una condición de carrera: ambos compiten por tomar el mismo tenedor, y uno de ellos se queda sin comer. Si todos los filósofos toman el tenedor que está a su derecha al mismo tiempo, entonces todos se quedarán esperando eternamente, porque alguien debe liberar el tenedor que les falta. Nadie lo hará porque todos se encuentran en la misma situación (esperando que alguno deje sus tenedores). Entonces los filósofos se morirán de hambre. El problema consiste en encontrar un algoritmo que permita que los filósofos nunca se mueran de hambre.
+
+
+
+---
 ### Actividad 
 
 #### **OBJETIVO**
@@ -856,11 +860,11 @@ ciones de entrada/salida con el uso de memoria caché.
 
 ### Actividades: Dispositivos de entrada y salida en Linux
 
-**Introducción**
+- **Introducción**
 
 En este ejercicio, aprenderá a listar, verificar y analizar los dispositivos de entrada y salida en Linux. Usarán comandos básicos y herramientas comunes disponibles en cualquier distribución.
 
-**Actividad 1: Listar dispositivos conectados**
+- **Actividad 1: Listar dispositivos conectados**
 
 1. Objetivo
 
@@ -878,11 +882,24 @@ Conocer los dispositivos de entrada y salida conectados al sistema.
         
         `dmesg | grep usb`: Muestra los mensajes del kernel relacionados con dispositivos USB.
     3. Conteste:
-        ¿Qué tipos de dispositivos se muestran en la salida de `lsblk`?
-        ¿Cuál es la diferencia entre `lsusb` y `lspci`?
-        ¿Qué información adicional proporciona `dmesg | grep usb`?
+        - ¿Qué tipos de dispositivos se muestran en la salida de `lsblk`?
+            
+              En resumen, los dispositivos listados son bucles (loop), discos físicos (disk), particiones (part), y un dispositivo de solo lectura (rom).
 
-**Actividad 2: Verificar dispositivos de almacenamiento**
+        - ¿Cuál es la diferencia entre `lsusb` y `lspci`?
+
+              lsusb: Muestra periféricos externos.
+
+              lspci: Muestra tarjetas de expansión y controladoras.
+
+        - ¿Qué información adicional proporciona `dmesg | grep usb`?
+  
+               De echo el comando seria asi para que te deje dar permiso: sudo dmesg | grep usb
+
+               El comando te proporciona un registro detallado de todos los eventos de interacción con dispositivos USB en el sistema, desde la detección hasta la manipulación del dispositivo (como el almacenamiento masivo).
+               
+
+- **Actividad 2: Verificar dispositivos de almacenamiento**
 
 1. Objetivo
 
@@ -895,10 +912,29 @@ Aprender cómo identificar discos duros, particiones y su configuración.
     3. Use `df -h` para listar los dispositivos montados y su espacio disponible.
     4. Conteste:
         - ¿Qué dispositivos de almacenamiento están conectados a su sistema?
-        - ¿Qué particiones están montadas actualmente?
-        - ¿Qué tipo de sistemas de archivos se usan en las particiones?
+        
+              Dispositivo: /dev/sda (maquina virtual)
 
-**Actividad 3: Explorar dispositivos de entrada**
+              Dispositivo: /dev/sdb (usb)
+
+        - ¿Qué particiones están montadas actualmente?
+        
+               S.ficheros     Tamaño Usados  Disp Uso% Montado en
+                tmpfs            391M   1,7M  390M   1% /run
+                /dev/sda2         25G    15G  8,3G  65% /
+                tmpfs            2,0G    40M  1,9G   2% /dev/shm
+                tmpfs            5,0M   8,0K  5,0M   1% /run/lock
+                tmpfs            391M   136K  391M   1% /run/user/1000
+                /dev/sdb1         15G   6,6G  8,0G  45% /mnt/nueva_particion
+
+        
+        - ¿Qué tipo de sistemas de archivos se usan en las particiones?
+  
+              ext4 en las particiones de discos físicos (/dev/sda2 y /dev/sdb1).
+
+              tmpfs en las particiones de espacio temporal en memoria.
+
+- **Actividad 3: Explorar dispositivos de entrada**
 
 1. Objetivo
 
@@ -914,7 +950,15 @@ Identificar dispositivos como teclados, ratones y cámaras.
         - Controladores USB adicionales
     4. Conteste:
         - ¿Qué eventos genera cada dispositivo al interactuar con ellos?
+        
+              Teclado: Generalmente genera eventos EV_KEY para las teclas presionadas y liberadas, y EV_SYN para sincronizar los eventos.
+              Mouse: Genera eventos EV_REL (movimiento del puntero) y EV_KEY (clics de botones).
+              Controladores USB adicionales: Pueden generar eventos EV_ABS (movimiento de ejes) y EV_KEY (presión de botones), dependiendo del tipo de controlador (por ejemplo, un gamepad).
+        
         - ¿Cómo se identifican los dispositivos en `/proc/bus/input/devices`?
+
+              Los dispositivos de entrada se identifican por el campo Name="...", que describe el dispositivo (por ejemplo, "USB Keyboard", "USB Mouse"). También puedes ver el campo Handlers=, que indica el tipo de controlador utilizado por el dispositivo (por ejemplo, kbd para un teclado o mouse para un ratón). Además, el campo Bus=... muestra el tipo de bus (por ejemplo, USB, PS/2).
+
 
 **Actividad 4: Examinar dispositivos de salida**
 
@@ -929,8 +973,20 @@ Entender cómo identificar dispositivos de salida como monitores y tarjetas de s
     3. Use `lsof /dev/snd/*` para ver qué procesos están utilizando la tarjeta de sonido.
     4. Conteste:
         - ¿Qué salidas de video están disponibles en su sistema?
+        
+              La salida de video disponible en tu sistema es Virtual-1, con una resolución actual de 1920x966. También tiene varias resoluciones adicionales disponibles, como 1280x960, 1152x864, 1024x768, etc.
+        
         - ¿Qué dispositivos de sonido se detectaron?
+        
+              Se detectó la tarjeta de sonido Intel 82801AA-ICH, con el dispositivo Intel ICH.
+        
         - ¿Qué procesos están usando la tarjeta de sonido?
+
+               Los procesos que están utilizando la tarjeta de sonido son:
+
+                pipewire (PID 2738), que está usando el dispositivo /dev/snd/seq.
+
+                wireplumb (PID 2742), que está utilizando el dispositivo /dev/snd/controlC0.
 
 **Actividad 5: Crear un script de resumen**
 
@@ -943,9 +999,37 @@ Automatizar la recopilación de información de dispositivos de entrada y salida
     1. Cree un archivo llamado `dispositivos.sh` y agregue el siguiente contenido: ```bash #!/bin/bash echo "Dispositivos de bloque:" lsblk echo "Dispositivos USB:" lsusb echo "Dispositivos PCI:" lspci echo "Dispositivos de entrada:" cat /proc/bus/input/devices echo "Salidas de video:" xrandr echo "Tarjetas de sonido:" aplay -l ```
     2. Ejecute el script usando `bash dispositivos.sh`.
     3. Modifique el script para guardar la salida en un archivo llamado `resumendispositivos.txt`.
+    
+         [resumendispositivos.txt](../../resumendispositivos.txt)
+    
     4. Conteste:
         - ¿Qué ventajas tiene usar un script para recopilar esta información?
+        
+                Usar un script para recopilar esta información tiene varias ventajas:
+
+                Automatización: Puedes ejecutar el script una y otra vez sin tener que escribir comandos manualmente cada vez, lo que ahorra tiempo.
+                
+                Repetibilidad: Si necesitas recopilar la misma información más tarde o en múltiples máquinas, puedes ejecutar el mismo script y obtener resultados consistentes.
+                
+                Almacenamiento de resultados: Puedes redirigir la salida del script a un archivo de texto, como hiciste con resumendispositivos.txt, lo que facilita el análisis posterior.
+                
+                Consistencia: No hay margen para olvidarse de ejecutar algún comando o cometer errores al escribir comandos manualmente.
+        
         - ¿Qué cambios realizaría para personalizar el script?
+
+                Para personalizar aún más el script, podrías realizar los siguientes cambios:
+
+                Agregar más información: Si quieres más detalles sobre los dispositivos o servicios, puedes añadir más comandos al script, como lsusb -v para más detalles sobre los dispositivos USB o lscpu para información detallada sobre la CPU.
+                
+                Formatear la salida: Podrías agregar algunas instrucciones de formato, como encabezados más claros, para que los resultados sean más fáciles de leer, por ejemplo, usando echo "-----".
+                
+                Filtrar resultados: Si no te interesa la salida completa de algún comando, puedes usar grep para filtrar la información relevante. Por ejemplo, si solo te interesa ver las tarjetas de sonido activas, podrías usar aplay -l | grep -i "card" para filtrar las líneas que contienen "card".
+                
+                Agregar fecha al archivo: Si ejecutas el script con frecuencia, podrías agregar la fecha al nombre del archivo para no sobrescribir los resultados anteriores. Por ejemplo:
+                echo "Información recopilada el $(date)" >> "resumendispositivos_$(date +'%Y%m%d_%H%M').txt"
+
+
+
 
 **Actividad 6: Reflexión y discusión**
 
@@ -964,364 +1048,558 @@ Analizar la importancia del manejo de dispositivos en sistemas Linux.
 
 
 ### Comandos de Entrada y Salida, Discos y Archivos
-#### **Ejercicio 1: Montar y Desmontar Discos**
 
-Objetivo: Aprender a montar y desmontar un dispositivo externo.
+- ####  **Ejercicio 1: Montar y Desmontar Discos**
+
+   - Objetivo: Aprender a montar y desmontar un dispositivo externo.
     Inserta una memoria USB en el sistema.
 
- Encuentra el dispositivo usando el comando:
+   - Encuentra el dispositivo usando el comando:
 
-          lsblk
+         lsblk
 
-o
+       o
 
-          fdisk -l
+         fdisk -l
 
-Monta la memoria USB en un directorio, por ejemplo, `/mnt/usb`:
+    - Monta la memoria USB en un directorio, por ejemplo, `/mnt/usb`:
 
           sudo mount /dev/sdX1 /mnt/usb
 
-Verifica que esté montado correctamente:
+    - Verifica que esté montado correctamente:
 
           df -h
 
-Copia un archivo desde tu directorio personal al dispositivo USB:
+    - Copia un archivo desde tu directorio personal al dispositivo USB:
 
           cp archivo.txt /mnt/usb/
 
-Desmonta la memoria USB:
+    - Desmonta la memoria USB:
 
           sudo umount /mnt/usb
 
-***RESULTADO***
-
-`nelosn@nelosn-lenovo:~$ lsblk`
-
-    NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
-    loop0    7:0    0     4K  1 loop /snap/bare/5
-    loop1    7:1    0  73,9M  1 loop /snap/core22/1663
-    loop2    7:2    0  73,9M  1 loop /snap/core22/1722
-    loop3    7:3    0 270,7M  1 loop /snap/firefox/4259
-    loop4    7:4    0   273M  1 loop /snap/firefox/5273
-    loop5    7:5    0  10,7M  1 loop /snap/firmware-updater/127
-    loop6    7:6    0  11,1M  1 loop /snap/firmware-updater/147
-    loop7    7:7    0   497M  1 loop /snap/gnome-42-2204/141
-    loop8    7:8    0 505,1M  1 loop /snap/gnome-42-2204/176
-    loop9    7:9    0  91,7M  1 loop /snap/gtk-common-themes/1535
-    loop10   7:10   0  12,2M  1 loop /snap/snap-store/1216
-    loop11   7:11   0  10,7M  1 loop /snap/snap-store/1218
-    loop12   7:12   0  38,8M  1 loop /snap/snapd/21759
-    loop13   7:13   0  44,3M  1 loop /snap/snapd/23258
-    loop14   7:14   0   476K  1 loop /snap/snapd-desktop-integration/157
-    loop15   7:15   0   568K  1 loop /snap/snapd-desktop-integration/253
-    sda      8:0    0    25G  0 disk 
-    ├─sda1   8:1    0     1M  0 part 
-    └─sda2   8:2    0    25G  0 part /var/snap/firefox/common/host-hunspell
-                                    /
-    sdb      8:16   1  14,5G  0 disk 
-    └─sdb1   8:17   1  14,5G  0 part /media/nelosn/ESD-ISO
-    sr0     11:0    1  1024M  0 rom  
-`nelosn@nelosn-lenovo:~$ sudo mount /dev/sdb1 /mnt/usb`
+    - ***RESULTADO***
+
+        `nelosn@nelosn-lenovo:~$ lsblk` "Veo mi dispositivo usb"
+
+            NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
+            loop0    7:0    0     4K  1 loop /snap/bare/5
+            loop1    7:1    0  73,9M  1 loop /snap/core22/1722
+            loop2    7:2    0 270,7M  1 loop /snap/firefox/4259
+            loop3    7:3    0  73,9M  1 loop /snap/core22/1663
+            loop4    7:4    0   273M  1 loop /snap/firefox/5273
+            loop5    7:5    0  11,1M  1 loop /snap/firmware-updater/147
+            loop6    7:6    0  10,7M  1 loop /snap/firmware-updater/127
+            loop7    7:7    0   497M  1 loop /snap/gnome-42-2204/141
+            loop8    7:8    0 505,1M  1 loop /snap/gnome-42-2204/176
+            loop9    7:9    0  91,7M  1 loop /snap/gtk-common-themes/1535
+            loop10   7:10   0  10,7M  1 loop /snap/snap-store/1218
+            loop11   7:11   0  12,2M  1 loop /snap/snap-store/1216
+            loop12   7:12   0  38,8M  1 loop /snap/snapd/21759
+            loop13   7:13   0  44,3M  1 loop /snap/snapd/23258
+            loop14   7:14   0   476K  1 loop /snap/snapd-desktop-integration/157
+            loop15   7:15   0   568K  1 loop /snap/snapd-desktop-integration/253
+            sda      8:0    0    25G  0 disk 
+            ├─sda1   8:1    0     1M  0 part 
+            └─sda2   8:2    0    25G  0 part /var/snap/firefox/common/host-hunspell
+                                            /
+            sdb      8:16   1  14,5G  0 disk 
+            └─sdb1   8:17   1  14,5G  0 part /media/nelosn/ESD-ISO
+            sr0     11:0    1  1024M  0 rom  
+
+        `nelosn@nelosn-lenovo:~$ sudo mount /dev/sdb1 /mnt/usb` "Monto la usb a un directorio"
+            
+        `nelosn@nelosn-lenovo:~$ df -h` "Veo mi usb se haya montado bien"
+
+            S.ficheros     Tamaño Usados  Disp Uso% Montado en
+            tmpfs            391M   1,6M  390M   1% /run
+            /dev/sda2         25G    15G  8,7G  63% /
+            tmpfs            2,0G    35M  1,9G   2% /dev/shm
+            tmpfs            5,0M   8,0K  5,0M   1% /run/lock
+            tmpfs            391M   136K  391M   1% /run/user/1000
+            /dev/sdb1         15G   7,3G  7,4G  50% /mnt/usb
+
+        `nelosn@nelosn-lenovo:~$ touch ~/archivo.txt` "Creo un .txt en mi directorio presonal"
+
+        `nelosn@nelosn-lenovo:~$ ls` "Veo que se haya creado el archivo"
+
+            archivo.txt  Documentos  Imágenes  Plantillas  snap
+            Descargas    Escritorio  Música    Público     Vídeos
+
+        `nelosn@nelosn-lenovo:~$ cp archivo.txt /mnt/usb/` "Copio el archivo y lo paso a la usb"
+
+        `nelosn@nelosn-lenovo:~$ ls /mnt/usb` "Veo el archivo en mi usb"
+
+            acta.pdf
+            archivo.txt
+            CartaCompromisoLaboral.pdf
+            'comprobante enero-junio.pdf'
+            CURP_EIJN020224HMNLMLA5.pdf
+            curso
+            'El grinch animado.mp4'
+            'ELECTRONICA DIGITAL.pptx'
+            'ERS simplificado.doc'
+            estc3a1tica-de-russel-hibbeler-12va-edicic3b3n.pdf
+            '_Fundamentos de física Vol. 1, 9na Edición - Raymond A. Serway.pdf'
+            'Fundamentos de física Vol. 1, 9na Edición - Raymond A. Serway.pdf'
+            Git-2.44.0-64-bit.exe
+            'halo ce by the king of MP4'
+            imagenes.docx
+            'ITMORELIA-IT-AC-001-02 SOLICITUD DE INSCRIPCION (3).doc'
+            'ITMORELIA-IT-AC-001-05 CONTRATO CON EL ESTUDIANTE (1) (1).doc'
+            jdk-8u301-windows-x64.exe
+            'JERRGA DEL CUBO DE RUBIK.docx'
+            maceta.pdf
+            'Mapa Simulacion 2.0.pdf'
+            'Mario Bross la pelicula@ByCasique.mp4'
+            'Memoria en Java POO.rar'
+            musica
+            mysql-installer-community-8.0.30.0.msi
+            netbeans-8.2-windows.exe
+            'Nueva carpeta'
+            'Nueva carpeta (2)'
+            'Nueva carpeta (3)'
+            paginas.pdf
+            'pcb vex.docx'
+            postgresql-16.2-1-windows-x64-binaries.zip
+            postgresql-16.2-1-windows-x64.exe
+            Práctica_2.pdf
+            'Principios electricos.pdf'
+            protadaPortafolio.pdf
+            'Protocolo de Investigacion V4.pdf'
+            'Protocolo de Investigacion V5-Final.pdf'
+            'Protocolo del Proyecto de Vinculación-V2.docx'
+            'Protocolo del Proyecto de Vinculación-V3.pdf'
+            'REGLAMENTO DE USO DE LOCKERS ISC.pdf'
+            Simio-12.219.22821.zip
+            'Solicitud de Proyecto del banco de proyectos.docx'
+            StudentExpertFitSetup.exe
+            'System Volume Information'
+            'talLer IV'
+            xampp-windows-x64-8.0.30-0-VS16-installer.exe
+
+        `nelosn@nelosn-lenovo:~$ sudo umount /mnt/usb` "Desmonto mi usb"
 
-`nelosn@nelosn-lenovo:~$ df -h`
+        `nelosn@nelosn-lenovo:~$ df -h` "Veo que se haya desmontado la usb"
 
-    S.ficheros     Tamaño Usados  Disp Uso% Montado en
-    tmpfs            391M   1,7M  390M   1% /run
-    /dev/sda2         25G    14G  9,9G  58% /
-    tmpfs            2,0G    28M  1,9G   2% /dev/shm
-    tmpfs            5,0M   8,0K  5,0M   1% /run/lock
-    tmpfs            391M   140K  391M   1% /run/user/1000
-    /dev/sdb1         15G   7,3G  7,4G  50% /mnt/usb
-`nelosn@nelosn-lenovo:~$ cp archivo.txt /mnt/usb/`
+            S.ficheros     Tamaño Usados  Disp Uso% Montado en
+            tmpfs            391M   1,6M  390M   1% /run
+            /dev/sda2         25G    15G  8,7G  63% /
+            tmpfs            2,0G    35M  1,9G   2% /dev/shm
+            tmpfs            5,0M   8,0K  5,0M   1% /run/lock
+            tmpfs            391M   136K  391M   1% /run/user/1000
+            /dev/sdb1         15G   7,3G  7,4G  50% /media/nelosn/ESD-ISO
 
-`nelosn@nelosn-lenovo:~$ sudo umount /mnt/usb`
+        `nelosn@nelosn-lenovo:~$`
 
-`nelosn@nelosn-lenovo:~$`
 
 
-#### **Ejercicio 2: Redirección de Entrada y Salida**
+- #### **Ejercicio 2: Redirección de Entrada y Salida**
 
-Objetivo: Usar redirección para guardar la salida de comandos en archivos.
+    - Objetivo: Usar redirección para guardar la salida de comandos en archivos.
 
-Lista los archivos de tu directorio actual y guarda el resultado en un archivo `listado.txt`:
+    - Lista los archivos de tu directorio actual y guarda el resultado en un archivo `listado.txt`:
 
-          ls -l > listado.txt
+            ls -l > listado.txt
 
-Muestra el contenido del archivo en la terminal:
+    - Muestra el contenido del archivo en la terminal:
 
-          cat listado.txt
+            cat listado.txt
 
-Añade la fecha actual al final del archivo:
+    - Añade la fecha actual al final del archivo:
 
-          date >> listado.txt
+            date >> listado.txt
 
-Muestra todo el contenido del archivo nuevamente:
+    - Muestra todo el contenido del archivo nuevamente:
 
-          cat listado.txt
+            cat listado.txt
 
 
-***RESULTADO***
+    - ***RESULTADO***
 
-`nelosn@nelosn-lenovo:~$ ls -l > listado.txt`
+        `nelosn@nelosn-lenovo:~$ ls -l > listado.txt` "Crea y escribe en un archivo mi directorio personal"
 
-`nelosn@nelosn-lenovo:~$ cat listado.txt`
+        `nelosn@nelosn-lenovo:~$ cat listado.txt` "Veo lo que se escribio"
 
-    total 36
-    -rw-rw-r-- 1 nelosn nelosn    0 dic 10 23:57 archivo.txt
-    drwxr-xr-x 2 nelosn nelosn 4096 dic  1 22:42 Descargas
-    drwxr-xr-x 4 nelosn nelosn 4096 dic  3 17:18 Documentos
-    drwxr-xr-x 2 nelosn nelosn 4096 mar 19  2024 Escritorio
-    drwxr-xr-x 3 nelosn nelosn 4096 dic  3 17:17 Imágenes
-    -rw-rw-r-- 1 nelosn nelosn    0 dic 11 00:22 listado.txt
-    drwxr-xr-x 2 nelosn nelosn 4096 mar 19  2024 Música
-    drwxr-xr-x 2 nelosn nelosn 4096 mar 19  2024 Plantillas
-    drwxr-xr-x 2 nelosn nelosn 4096 mar 19  2024 Público
-    drwx------ 6 nelosn nelosn 4096 dic  1 22:08 snap
-    drwxr-xr-x 2 nelosn nelosn 4096 mar 19  2024 Vídeos
+            total 36
+            -rw-rw-r-- 1 nelosn nelosn    0 dic 10 23:57 archivo.txt
+            drwxr-xr-x 2 nelosn nelosn 4096 dic  1 22:42 Descargas
+            drwxr-xr-x 4 nelosn nelosn 4096 dic  3 17:18 Documentos
+            drwxr-xr-x 2 nelosn nelosn 4096 mar 19  2024 Escritorio
+            drwxr-xr-x 3 nelosn nelosn 4096 dic  3 17:17 Imágenes
+            -rw-rw-r-- 1 nelosn nelosn    0 dic 11 00:22 listado.txt
+            drwxr-xr-x 2 nelosn nelosn 4096 mar 19  2024 Música
+            drwxr-xr-x 2 nelosn nelosn 4096 mar 19  2024 Plantillas
+            drwxr-xr-x 2 nelosn nelosn 4096 mar 19  2024 Público
+            drwx------ 6 nelosn nelosn 4096 dic  1 22:08 snap
+            drwxr-xr-x 2 nelosn nelosn 4096 mar 19  2024 Vídeos
 
-`nelosn@nelosn-lenovo:~$ date >> listado.txt`
+        `nelosn@nelosn-lenovo:~$ date >> listado.txt` "Lediogo que imprima la fecha y hora en el archivo"
 
-`nelosn@nelosn-lenovo:~$ cat listado.txt`
+        `nelosn@nelosn-lenovo:~$ cat listado.txt` "Veo lo que escribio"
 
-    total 36
-    -rw-rw-r-- 1 nelosn nelosn    0 dic 10 23:57 archivo.txt
-    drwxr-xr-x 2 nelosn nelosn 4096 dic  1 22:42 Descargas
-    drwxr-xr-x 4 nelosn nelosn 4096 dic  3 17:18 Documentos
-    drwxr-xr-x 2 nelosn nelosn 4096 mar 19  2024 Escritorio
-    drwxr-xr-x 3 nelosn nelosn 4096 dic  3 17:17 Imágenes
-    -rw-rw-r-- 1 nelosn nelosn    0 dic 11 00:22 listado.txt
-    drwxr-xr-x 2 nelosn nelosn 4096 mar 19  2024 Música
-    drwxr-xr-x 2 nelosn nelosn 4096 mar 19  2024 Plantillas
-    drwxr-xr-x 2 nelosn nelosn 4096 mar 19  2024 Público
-    drwx------ 6 nelosn nelosn 4096 dic  1 22:08 snap
-    drwxr-xr-x 2 nelosn nelosn 4096 mar 19  2024 Vídeos
-    mié 11 dic 2024 00:23:21 CST
+            total 36
+            -rw-rw-r-- 1 nelosn nelosn    0 dic 10 23:57 archivo.txt
+            drwxr-xr-x 2 nelosn nelosn 4096 dic  1 22:42 Descargas
+            drwxr-xr-x 4 nelosn nelosn 4096 dic  3 17:18 Documentos
+            drwxr-xr-x 2 nelosn nelosn 4096 mar 19  2024 Escritorio
+            drwxr-xr-x 3 nelosn nelosn 4096 dic  3 17:17 Imágenes
+            -rw-rw-r-- 1 nelosn nelosn    0 dic 11 00:22 listado.txt
+            drwxr-xr-x 2 nelosn nelosn 4096 mar 19  2024 Música
+            drwxr-xr-x 2 nelosn nelosn 4096 mar 19  2024 Plantillas
+            drwxr-xr-x 2 nelosn nelosn 4096 mar 19  2024 Público
+            drwx------ 6 nelosn nelosn 4096 dic  1 22:08 snap
+            drwxr-xr-x 2 nelosn nelosn 4096 mar 19  2024 Vídeos
+            mié 11 dic 2024 00:23:21 CST
 
-`nelosn@nelosn-lenovo:~$ `
+        `nelosn@nelosn-lenovo:~$ `
 
 
-#### **Ejercicio 3: Copiar y Mover Archivos**
+- #### **Ejercicio 3: Copiar y Mover Archivos**
 
-Objetivo: Practicar copiar y mover archivos y directorios.
+    - Objetivo: Practicar copiar y mover archivos y directorios.
 
-Crea un archivo de texto llamado `archivo1.txt`:
+    - Crea un archivo de texto llamado `archivo1.txt`:
 
-          echo "Este es un archivo de prueba" > archivo1.txt
+            echo "Este es un archivo de prueba" > archivo1.txt
 
-Copia este archivo a otro directorio, por ejemplo, `/tmp`:
+    - Copia este archivo a otro directorio, por ejemplo, `/tmp`:
 
-          cp archivo1.txt /tmp/
+            cp archivo1.txt /tmp/
 
-Renombra el archivo copiado a `archivo2.txt` en `/tmp`:
+    - Renombra el archivo copiado a `archivo2.txt` en `/tmp`:
 
-          mv /tmp/archivo1.txt /tmp/archivo2.txt
+            mv /tmp/archivo1.txt /tmp/archivo2.txt
 
-Mueve el archivo `archivo2.txt` de vuelta a tu directorio actual:
+    - Mueve el archivo `archivo2.txt` de vuelta a tu directorio actual:
 
-          mv /tmp/archivo2.txt .
+            mv /tmp/archivo2.txt .
 
-***RESULTADO***
+    - ***RESULTADO***
 
-`nelosn@nelosn-lenovo:~$ echo "Este es un archivo de prueba" > archivo1.txt`
+        `nelosn@nelosn-lenovo:~$ echo "Este es un archivo de prueba" > archivo1.txt` "Ecribe y crea el archivo"
 
-`nelosn@nelosn-lenovo:~$ cp archivo1.txt /tmp/`
+        `nelosn@nelosn-lenovo:~$ ls` "Veo que este en el directorio"
 
-`nelosn@nelosn-lenovo:~$ mv /tmp/archivo1.txt /tmp/archivo2.txt`
+            archivo1.txt  Documentos  Imágenes     Música      Público  Vídeos
+            Descargas     Escritorio  listado.txt  Plantillas  snap
 
-`nelosn@nelosn-lenovo:~$ mv /tmp/archivo2.txt .`
+        `nelosn@nelosn-lenovo:~$ cp archivo1.txt /tmp/` "Copia el archivo y lo pasa al directorio tmp"
 
-`nelosn@nelosn-lenovo:~$ `
+        `nelosn@nelosn-lenovo:~$ ls /tmp` "Compruebo que este"
 
-![resultado ejerciico 3](img/ejercicio3.png)
+            archivo1.txt
+            snap-private-tmp
+            systemd-private-a18893d0522b43adb7a28d9c6a43c082-colord.service-gN5zuy
+            systemd-private-a18893d0522b43adb7a28d9c6a43c082-fwupd.service-JW7Vlu
+            systemd-private-a18893d0522b43adb7a28d9c6a43c082-ModemManager.service-HGXyxs
+            systemd-private-a18893d0522b43adb7a28d9c6a43c082-polkit.service-xXtLq4
+            systemd-private-a18893d0522b43adb7a28d9c6a43c082-power-profiles-daemon.service-TzSFXa
+            systemd-private-a18893d0522b43adb7a28d9c6a43c082-switcheroo-control.service-8BwyAy
+            systemd-private-a18893d0522b43adb7a28d9c6a43c082-systemd-logind.service-Lwf6ZW
+            systemd-private-a18893d0522b43adb7a28d9c6a43c082-systemd-oomd.service-LeVvmv
+            systemd-private-a18893d0522b43adb7a28d9c6a43c082-systemd-resolved.service-53VrRA
+            systemd-private-a18893d0522b43adb7a28d9c6a43c082-upower.service-pxGj51
 
+        `nelosn@nelosn-lenovo:~$  mv /tmp/archivo1.txt /tmp/archivo2.txt` "Reinscribo el nombre del archivo "
 
-#### **Ejercicio 4: Comprimir y Descomprimir Archivos**
+        `nelosn@nelosn-lenovo:~$ ls /tmp` "Compruebo "
 
-Objetivo: Aprender a trabajar con compresión de archivos. 
+            archivo2.txt
+            snap-private-tmp
+            systemd-private-a18893d0522b43adb7a28d9c6a43c082-colord.service-gN5zuy
+            systemd-private-a18893d0522b43adb7a28d9c6a43c082-fwupd.service-JW7Vlu
+            systemd-private-a18893d0522b43adb7a28d9c6a43c082-ModemManager.service-HGXyxs
+            systemd-private-a18893d0522b43adb7a28d9c6a43c082-polkit.service-xXtLq4
+            systemd-private-a18893d0522b43adb7a28d9c6a43c082-power-profiles-daemon.service-TzSFXa
+            systemd-private-a18893d0522b43adb7a28d9c6a43c082-switcheroo-control.service-8BwyAy
+            systemd-private-a18893d0522b43adb7a28d9c6a43c082-systemd-logind.service-Lwf6ZW
+            systemd-private-a18893d0522b43adb7a28d9c6a43c082-systemd-oomd.service-LeVvmv
+            systemd-private-a18893d0522b43adb7a28d9c6a43c082-systemd-resolved.service-53VrRA
+            systemd-private-a18893d0522b43adb7a28d9c6a43c082-upower.service-pxGj51
 
-Crea un directorio llamado `backup` y copia algunos archivos en él. 
+        `nelosn@nelosn-lenovo:~$ mv /tmp/archivo2.txt .` "Ahora ese archivo lo paso a directorio personal"
 
-Comprime el directorio `backup` en un archivo `.tar.gz`:
+        `nelosn@nelosn-lenovo:~$ ls` " Compruebo "
+            archivo1.txt  Descargas   Escritorio  listado.txt  Plantillas  snap
+            archivo2.txt  Documentos  Imágenes    Música       Público     Vídeos
 
-          tar -czvf backup.tar.gz backup/
+        `nelosn@nelosn-lenovo:~$ `
 
-Borra el directorio original y extrae el contenido del archivo comprimido:
 
-          tar -xzvf backup.tar.gz
 
-***RESULTADO***
+- #### **Ejercicio 4: Comprimir y Descomprimir Archivos**
 
-`nelosn@nelosn-lenovo:~$ mkdir backup` "Creo el directorio"
+    - Objetivo: Aprender a trabajar con compresión de archivos. 
 
-`nelosn@nelosn-lenovo:~$ ls` "Veo que se creo"
+    - Crea un directorio llamado `backup` y copia algunos archivos en él. 
 
-    archivo1.txt  archivo.txt  Descargas   Escritorio  listado.txt  Plantillas  snap
-    archivo2.txt  backup       Documentos  Imágenes    Música       Público     Vídeos
+    - Comprime el directorio `backup` en un archivo `.tar.gz`:
 
-`nelosn@nelosn-lenovo:~$ cp -r /home/nelosn/Documentos/SO backup/` "Copio unos harchivos"
+            tar -czvf backup.tar.gz backup/
 
-`nelosn@nelosn-lenovo:~$ ls backup/` "Veo que ya tengo los harchivos en el directorio"
-    SO
+    - Borra el directorio original y extrae el contenido del archivo comprimido:
 
-`nelosn@nelosn-lenovo:~$ tar -czvf backup.tar.gz backup/` "Comprimo el directorio"
+            tar -xzvf backup.tar.gz
 
-    backup/
-    backup/SO/
-    backup/SO/tarea2/
-    backup/SO/tarea2/planificadores2
-    backup/SO/tarea2/planificadores1.c
-    backup/SO/tarea2/planificadores7
-    backup/SO/tarea2/planificadores5
-    backup/SO/tarea2/planificadores3
-    backup/SO/tarea2/planificadores6.c
-    backup/SO/tarea2/planificadores1
-    backup/SO/tarea2/planificadores7.c
-    backup/SO/tarea2/planificadores2.c
-    backup/SO/tarea2/planificadores4
-    backup/SO/tarea2/planificadores3.c
-    backup/SO/tarea2/planificadores4.c
-    backup/SO/tarea2/planificadores6
-    backup/SO/tarea2/planificadores5.c
-    backup/SO/tarea2/planificadores
-    backup/SO/matrix.c
-    backup/SO/Proceso4
-    backup/SO/Proceso4.c
-    backup/SO/matrix
-    backup/SO/tarea1/
-    backup/SO/tarea1/ejercicio3.c
-    backup/SO/tarea1/ejercicio4
-    backup/SO/tarea1/ejercicio8
-    backup/SO/tarea1/ejercicio2.c
-    backup/SO/tarea1/ejercicio4.c
-    backup/SO/tarea1/ejercicio8.c
-    backup/SO/tarea1/ejercicio1.c
-    backup/SO/tarea1/ejercicio6
-    backup/SO/tarea1/ejercicio7
-    backup/SO/tarea1/ejercicio7.c
-    backup/SO/tarea1/ejercicio5
-    backup/SO/tarea1/ejercicio1
-    backup/SO/tarea1/ejercicio3
-    backup/SO/tarea1/ejercicio2
-    backup/SO/tarea1/ejercicio6.c
-    backup/SO/tarea1/programa
-    backup/SO/tarea1/ejercicio5.c
+    - ***RESULTADO***
 
-`nelosn@nelosn-lenovo:~$ ls`"Veo que ya me aparece el directorio comprimido"
+        `nelosn@nelosn-lenovo:~$ mkdir backup` "Creo el directorio"
 
-    archivo1.txt  backup         Documentos  listado.txt  Público
-    archivo2.txt  backup.tar.gz  Escritorio  Música       snap
-    archivo.txt   Descargas      Imágenes    Plantillas   Vídeos
+        `nelosn@nelosn-lenovo:~$ ls` "Veo que se creo"
 
-`nelosn@nelosn-lenovo:~$ rm -r backup/`"Borro el directorio original"
+            archivo1.txt  archivo.txt  Descargas   Escritorio  listado.txt  Plantillas  snap
+            archivo2.txt  backup       Documentos  Imágenes    Música       Público     Vídeos
 
-`nelosn@nelosn-lenovo:~$ ls` "Veo que ya no esta"
+        `nelosn@nelosn-lenovo:~$ cp -r /home/nelosn/Documentos/SO backup/` "Copio unos harchivos"
 
-    archivo1.txt  archivo.txt    Descargas   Escritorio  listado.txt  Plantillas  snap
-    archivo2.txt  backup.tar.gz  Documentos  Imágenes    Música       Público     Vídeos
+        `nelosn@nelosn-lenovo:~$ ls backup/` "Veo que ya tengo los harchivos en el directorio"
+            SO
 
-`nelosn@nelosn-lenovo:~$ tar -xzvf backup.tar.gz` "Descomprimo el directorio que esta comprimido"
+        `nelosn@nelosn-lenovo:~$ tar -czvf backup.tar.gz backup/` "Comprimo el directorio"
 
-    backup/
-    backup/SO/
-    backup/SO/tarea2/
-    backup/SO/tarea2/planificadores2
-    backup/SO/tarea2/planificadores1.c
-    backup/SO/tarea2/planificadores7
-    backup/SO/tarea2/planificadores5
-    backup/SO/tarea2/planificadores3
-    backup/SO/tarea2/planificadores6.c
-    backup/SO/tarea2/planificadores1
-    backup/SO/tarea2/planificadores7.c
-    backup/SO/tarea2/planificadores2.c
-    backup/SO/tarea2/planificadores4
-    backup/SO/tarea2/planificadores3.c
-    backup/SO/tarea2/planificadores4.c
-    backup/SO/tarea2/planificadores6
-    backup/SO/tarea2/planificadores5.c
-    backup/SO/tarea2/planificadores
-    backup/SO/matrix.c
-    backup/SO/Proceso4
-    backup/SO/Proceso4.c
-    backup/SO/matrix
-    backup/SO/tarea1/
-    backup/SO/tarea1/ejercicio3.c
-    backup/SO/tarea1/ejercicio4
-    backup/SO/tarea1/ejercicio8
-    backup/SO/tarea1/ejercicio2.c
-    backup/SO/tarea1/ejercicio4.c
-    backup/SO/tarea1/ejercicio8.c
-    backup/SO/tarea1/ejercicio1.c
-    backup/SO/tarea1/ejercicio6
-    backup/SO/tarea1/ejercicio7
-    backup/SO/tarea1/ejercicio7.c
-    backup/SO/tarea1/ejercicio5
-    backup/SO/tarea1/ejercicio1
-    backup/SO/tarea1/ejercicio3
-    backup/SO/tarea1/ejercicio2
-    backup/SO/tarea1/ejercicio6.c
-    backup/SO/tarea1/programa
-    backup/SO/tarea1/ejercicio5.c
+            backup/
+            backup/SO/
+            backup/SO/tarea2/
+            backup/SO/tarea2/planificadores2
+            backup/SO/tarea2/planificadores1.c
+            backup/SO/tarea2/planificadores7
+            backup/SO/tarea2/planificadores5
+            backup/SO/tarea2/planificadores3
+            backup/SO/tarea2/planificadores6.c
+            backup/SO/tarea2/planificadores1
+            backup/SO/tarea2/planificadores7.c
+            backup/SO/tarea2/planificadores2.c
+            backup/SO/tarea2/planificadores4
+            backup/SO/tarea2/planificadores3.c
+            backup/SO/tarea2/planificadores4.c
+            backup/SO/tarea2/planificadores6
+            backup/SO/tarea2/planificadores5.c
+            backup/SO/tarea2/planificadores
+            backup/SO/matrix.c
+            backup/SO/Proceso4
+            backup/SO/Proceso4.c
+            backup/SO/matrix
+            backup/SO/tarea1/
+            backup/SO/tarea1/ejercicio3.c
+            backup/SO/tarea1/ejercicio4
+            backup/SO/tarea1/ejercicio8
+            backup/SO/tarea1/ejercicio2.c
+            backup/SO/tarea1/ejercicio4.c
+            backup/SO/tarea1/ejercicio8.c
+            backup/SO/tarea1/ejercicio1.c
+            backup/SO/tarea1/ejercicio6
+            backup/SO/tarea1/ejercicio7
+            backup/SO/tarea1/ejercicio7.c
+            backup/SO/tarea1/ejercicio5
+            backup/SO/tarea1/ejercicio1
+            backup/SO/tarea1/ejercicio3
+            backup/SO/tarea1/ejercicio2
+            backup/SO/tarea1/ejercicio6.c
+            backup/SO/tarea1/programa
+            backup/SO/tarea1/ejercicio5.c
 
-`nelosn@nelosn-lenovo:~$ ls` "Veo que ya aparece el directorio descomrpimido"
+        `nelosn@nelosn-lenovo:~$ ls`"Veo que ya me aparece el directorio comprimido"
 
-    archivo1.txt  backup         Documentos  listado.txt  Público
-    archivo2.txt  backup.tar.gz  Escritorio  Música       snap
-    archivo.txt   Descargas      Imágenes    Plantillas   Vídeos
+            archivo1.txt  backup         Documentos  listado.txt  Público
+            archivo2.txt  backup.tar.gz  Escritorio  Música       snap
+            archivo.txt   Descargas      Imágenes    Plantillas   Vídeos
 
-`nelosn@nelosn-lenovo:~$ `
+        `nelosn@nelosn-lenovo:~$ rm -r backup/`"Borro el directorio original"
 
+        `nelosn@nelosn-lenovo:~$ ls` "Veo que ya no esta"
 
-#### **Ejercicio 5: Permisos y Propiedades de Archivos**
+            archivo1.txt  archivo.txt    Descargas   Escritorio  listado.txt  Plantillas  snap
+            archivo2.txt  backup.tar.gz  Documentos  Imágenes    Música       Público     Vídeos
 
-Objetivo: Aprender a modificar permisos y propietarios de archivos.
+        `nelosn@nelosn-lenovo:~$ tar -xzvf backup.tar.gz` "Descomprimo el directorio que esta comprimido"
 
-Crea un archivo llamado `privado.txt`:
+            backup/
+            backup/SO/
+            backup/SO/tarea2/
+            backup/SO/tarea2/planificadores2
+            backup/SO/tarea2/planificadores1.c
+            backup/SO/tarea2/planificadores7
+            backup/SO/tarea2/planificadores5
+            backup/SO/tarea2/planificadores3
+            backup/SO/tarea2/planificadores6.c
+            backup/SO/tarea2/planificadores1
+            backup/SO/tarea2/planificadores7.c
+            backup/SO/tarea2/planificadores2.c
+            backup/SO/tarea2/planificadores4
+            backup/SO/tarea2/planificadores3.c
+            backup/SO/tarea2/planificadores4.c
+            backup/SO/tarea2/planificadores6
+            backup/SO/tarea2/planificadores5.c
+            backup/SO/tarea2/planificadores
+            backup/SO/matrix.c
+            backup/SO/Proceso4
+            backup/SO/Proceso4.c
+            backup/SO/matrix
+            backup/SO/tarea1/
+            backup/SO/tarea1/ejercicio3.c
+            backup/SO/tarea1/ejercicio4
+            backup/SO/tarea1/ejercicio8
+            backup/SO/tarea1/ejercicio2.c
+            backup/SO/tarea1/ejercicio4.c
+            backup/SO/tarea1/ejercicio8.c
+            backup/SO/tarea1/ejercicio1.c
+            backup/SO/tarea1/ejercicio6
+            backup/SO/tarea1/ejercicio7
+            backup/SO/tarea1/ejercicio7.c
+            backup/SO/tarea1/ejercicio5
+            backup/SO/tarea1/ejercicio1
+            backup/SO/tarea1/ejercicio3
+            backup/SO/tarea1/ejercicio2
+            backup/SO/tarea1/ejercicio6.c
+            backup/SO/tarea1/programa
+            backup/SO/tarea1/ejercicio5.c
 
-          touch privado.txt
+        `nelosn@nelosn-lenovo:~$ ls` "Veo que ya aparece el directorio descomrpimido"
 
-Cambia los permisos del archivo para que solo el propietario pueda leer y escribir:
+            archivo1.txt  backup         Documentos  listado.txt  Público
+            archivo2.txt  backup.tar.gz  Escritorio  Música       snap
+            archivo.txt   Descargas      Imágenes    Plantillas   Vídeos
 
-          chmod 600 privado.txt
+        `nelosn@nelosn-lenovo:~$ `
 
-Cambia el propietario del archivo a otro usuario (si tienes privilegios):
 
-          sudo chown usuario privado.txt
+- #### **Ejercicio 5: Permisos y Propiedades de Archivos**
 
-#### **Ejercicio 6: Exploración de Dispositivos**
+    - Objetivo: Aprender a modificar permisos y propietarios de archivos.
 
-Objetivo: Identificar discos y particiones en el sistema.
+    - Crea un archivo llamado `privado.txt`:
 
-Usa `lsblk` para listar los discos y particiones:
+            touch privado.txt
 
-          lsblk
+    - Cambia los permisos del archivo para que solo el propietario pueda leer y escribir:
 
-Usa `du -sh` para ver el tamaño del contenido en un directorio de tu elección:
+            chmod 600 privado.txt
 
-          du -sh /ruta/directorio
+    - Cambia el propietario del archivo a otro usuario (si tienes privilegios):
 
-Verifica el uso de disco con `df -h`:
+            sudo chown usuario privado.txt
 
-          df -h
+    - ***RESULTADO***
 
-#### **Ejercicio 7: Crear y Formatear Particiones**
+        `nelosn@nelosn-lenovo:~$ touch privado.txt` "Creo el archivo"
 
-Objetivo: Crear y formatear una nueva partición (Usar disco de práctica o máquina virtual).
+        `nelosn@nelosn-lenovo:~$ chmod 600 privado.txt` " Cambio los permisos leer y escribir propietario"
 
-Identifica un disco no particionado:
+        `nelosn@nelosn-lenovo:~$ echo "Texto adicional" >> privado.txt` "Escribo un texto"
 
-          sudo fdisk -l
+        `nelosn@nelosn-lenovo:~$ cat privado.txt` "Veo lo que escribio"
 
-Usa `fdisk` para crear una nueva partición:
+             Texto adicional
 
-          sudo fdisk /dev/sdX
+        `nelosn@nelosn-lenovo:~$ sudo chown jose privado.txt` "Cambio el propetario del archivo "
 
-Formatea la partición como `ext4`:
+        `nelosn@nelosn-lenovo:~$ echo "Texto nuevo" >> privado.txt` "Vuelco a escribir algo"
 
-          sudo mkfs.ext4 /dev/sdX1
+             bash: privado.txt: Permiso denegado
 
-Monta la partición en un directorio y prueba escribiendo archivos en ella:
+        `nelosn@nelosn-lenovo:~$ su jose` "cambio de usuario"
+        
+        `jose@nelosn-lenovo:/home/nelosn$ echo "Texto nuevo" >> privado.txt` "Escribo algo en el archivo"
 
-          sudo mount /dev/sdX1 /mnt/nueva_particion
-          echo "Prueba de escritura" > /mnt/nueva_particion/test.txt
+             bash: privado.txt: Permiso denegado
+
+        `jose@nelosn-lenovo:/home/nelosn$ exit` " No deja escribir ni leer el archi por que solo el propetario origianl "
+
+             exit
+
+        `nelosn@nelosn-lenovo:~$ sudo chown nelosn privado.txt` "Cambio de propietario "
+
+        `nelosn@nelosn-lenovo:~$ echo "Texto nuevo" >> privado.txt` "Vuevo a escribir algo"
+
+        `nelosn@nelosn-lenovo:~$ cat privado.txt`
+
+        Texto adicional
+        Texto nuevo
+
+        `nelosn@nelosn-lenovo:~$ `
+
+
+
+- #### **Ejercicio 6: Exploración de Dispositivos**
+
+    - Objetivo: Identificar discos y particiones en el sistema.
+
+    - Usa `lsblk` para listar los discos y particiones:
+
+            lsblk
+
+    - Usa `du -sh` para ver el tamaño del contenido en un directorio de tu elección:
+
+            du -sh /ruta/directorio
+
+    - Verifica el uso de disco con `df -h`:
+
+            df -h
+
+    - ***RESULTADO***
+
+        `nelosn@nelosn-lenovo:~$ lsblk`
+                NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
+                loop0    7:0    0     4K  1 loop /snap/bare/5
+                loop1    7:1    0  73,9M  1 loop /snap/core22/1663
+                loop2    7:2    0  73,9M  1 loop /snap/core22/1722
+                loop3    7:3    0 270,7M  1 loop /snap/firefox/4259
+                loop4    7:4    0  10,7M  1 loop /snap/firmware-updater/127
+                loop5    7:5    0   273M  1 loop /snap/firefox/5273
+                loop6    7:6    0  11,1M  1 loop /snap/firmware-updater/147
+                loop7    7:7    0   497M  1 loop /snap/gnome-42-2204/141
+                loop8    7:8    0 505,1M  1 loop /snap/gnome-42-2204/176
+                loop9    7:9    0  91,7M  1 loop /snap/gtk-common-themes/1535
+                loop10   7:10   0  12,2M  1 loop /snap/snap-store/1216
+                loop11   7:11   0  10,7M  1 loop /snap/snap-store/1218
+                loop12   7:12   0  38,8M  1 loop /snap/snapd/21759
+                loop13   7:13   0  44,3M  1 loop /snap/snapd/23258
+                loop14   7:14   0   476K  1 loop /snap/snapd-desktop-integration/157
+                loop15   7:15   0   568K  1 loop /snap/snapd-desktop-integration/253
+                sda      8:0    0    25G  0 disk 
+                ├─sda1   8:1    0     1M  0 part 
+                └─sda2   8:2    0    25G  0 part /var/snap/firefox/common/host-hunspell
+                                                /
+                sdb      8:16   1  14,5G  0 disk 
+                └─sdb1   8:17   1  14,5G  0 part /media/nelosn/ESD-ISO
+                sr0     11:0    1  1024M  0 rom  
+
+        `nelosn@nelosn-lenovo:~$ du -sh /media/nelosn/ESD-ISO`
+
+                7,3G	/media/nelosn/ESD-ISO
+
+        `nelosn@nelosn-lenovo:~$ df -h /media/nelosn/ESD-ISO`
+
+                S.ficheros     Tamaño Usados  Disp Uso% Montado en
+                /dev/sdb1         15G   7,3G  7,4G  50% /media/nelosn/ESD-ISO
+
+        `nelosn@nelosn-lenovo:~$ `
+
+
+- #### **Ejercicio 7: Crear y Formatear Particiones**
+
+    - Objetivo: Crear y formatear una nueva partición (Usar disco de práctica o máquina virtual).
+
+    - Identifica un disco no particionado:
+
+            sudo fdisk -l
+
+    - Usa `fdisk` para crear una nueva partición:
+
+            sudo fdisk /dev/sdX
+
+    - Formatea la partición como `ext4`:
+
+            sudo mkfs.ext4 /dev/sdX1
+
+    - Monta la partición en un directorio y prueba escribiendo archivos en ella:
+
+            sudo mount /dev/sdX1 /mnt/nueva_particion
+            echo "Prueba de escritura" > /mnt/nueva_particion/test.txt
+
+    - ***RESUTADO***
+  
+       ![ejercicio](img/particionusb.png)
 
 
