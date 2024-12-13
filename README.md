@@ -1000,7 +1000,7 @@ Automatizar la recopilación de información de dispositivos de entrada y salida
     2. Ejecute el script usando `bash dispositivos.sh`.
     3. Modifique el script para guardar la salida en un archivo llamado `resumendispositivos.txt`.
     
-         [resumendispositivos.txt](../../resumendispositivos.txt)
+         [resumendispositivos.txt](resumendispositivos.txt)
     
     4. Conteste:
         - ¿Qué ventajas tiene usar un script para recopilar esta información?
