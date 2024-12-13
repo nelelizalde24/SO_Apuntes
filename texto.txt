@@ -1,0 +1,5 @@
+jose@nelosn-lenovo:~$ ls
+Descargas   Escritorio  Música      Público  Vídeos
+Documentos  Imágenes    Plantillas  snap
+jose@nelosn-lenovo:~$ 
+
