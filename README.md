@@ -22,6 +22,9 @@
       - [**Administración de Entrada/Salida**](#administración-de-entradasalida)
     - [Actividades: Dispositivos de entrada y salida en Linux](#actividades-dispositivos-de-entrada-y-salida-en-linux)
     - [Comandos de Entrada y Salida, Discos y Archivos](#comandos-de-entrada-y-salida-discos-y-archivos)
+    - [**Actividad Final**](#actividad-final)
+      - [**Sistemas de Archivos**](#sistemas-de-archivos)
+      - [**Protección y Seguridad**](#protección-y-seguridad)
 
 ### Hola Mundo 
 
@@ -720,39 +723,399 @@ ware para garantizar el funcionamiento eficiente de un equipo de cómputo.
     1.1 ¿Cuál es la diferencia entre fragmentación interna y    externa? Explica
     cómo cada una afecta el rendimiento de la memoria.
 
-       Respuesta : 
+    Respuesta : En ambos casos, el desperdicio de memoria reduce la eficiencia del sistema, pero la fragmentación externa tiende a ser más problemática en sistemas que requieren bloques grandes y contiguos.
+
+    | **Aspecto**              | **Fragmentación Interna**                      | **Fragmentación Externa**                      |
+    |--------------------------|-----------------------------------------------|-----------------------------------------------|
+    | **Causa principal**       | Bloques asignados más grandes de lo necesario. | Espacio libre dividido en pequeños fragmentos. |
+    | **Memoria desaprovechada**| Dentro de los bloques asignados.               | Entre los bloques asignados.                  |
+    | **Soluciones**            | Ajuste del tamaño de los bloques.             | Compactación, paginación o segmentación.      |
+
 
     1.2 Investiga y explica las políticas de reemplazo de páginas en sistemas
     operativos. ¿Cuál consideras más eficiente y por qué?
 
-       Respuesta : 
+    Respuesta : 
+    En general, la política más eficiente depende del contexto. Para entornos con recursos suficientes, LRU es preferible, mientras que Clock es más adecuado para sistemas con limitaciones de hardware.
 
 2. **Memoria real**
    
     2.1 Escribe un programa en C o Python que simule la administración de
     memoria mediante particiones fijas.
 
-       Respuesta : 
+    Respuesta : 
+
+    ```c 
+    #include <stdio.h>
+    #include <stdbool.h>
+
+    #define MAX_PARTITIONS 10
+    #define MAX_PROCESSES 10
+
+    typedef struct {
+        int size;
+        bool is_free;
+        int process_id;
+    } Partition;
+
+    typedef struct {
+        int id;
+        int size;
+    } Process;
+
+    // Inicialización de particiones de memoria
+    void initialize_partitions(Partition partitions[], int sizes[], int count) {
+        for (int i = 0; i < count; i++) {
+            partitions[i].size = sizes[i];
+            partitions[i].is_free = true;
+            partitions[i].process_id = -1; // -1 indica que no hay proceso asignado
+        }
+    }
+
+    // Asignar un proceso a una partición
+    bool allocate_process(Partition partitions[], int partition_count, Process process) {
+        for (int i = 0; i < partition_count; i++) {
+            if (partitions[i].is_free && partitions[i].size >= process.size) {
+                partitions[i].is_free = false;
+                partitions[i].process_id = process.id;
+                printf("Proceso %d asignado a partición de tamaño %d.\n", process.id, partitions[i].size);
+                return true;
+            }
+        }
+        printf("Proceso %d no pudo ser asignado.\n", process.id);
+        return false;
+    }
+
+    // Liberar una partición
+    bool deallocate_process(Partition partitions[], int partition_count, int process_id) {
+        for (int i = 0; i < partition_count; i++) {
+            if (!partitions[i].is_free && partitions[i].process_id == process_id) {
+                partitions[i].is_free = true;
+                partitions[i].process_id = -1;
+                printf("Proceso %d liberado de partición de tamaño %d.\n", process_id, partitions[i].size);
+                return true;
+            }
+        }
+        printf("Proceso %d no encontrado en memoria.\n", process_id);
+        return false;
+    }
+
+    // Mostrar el estado de la memoria
+    void display_memory(Partition partitions[], int partition_count) {
+        printf("\nEstado de la memoria:\n");
+        for (int i = 0; i < partition_count; i++) {
+            if (partitions[i].is_free) {
+                printf("Partición %d: Tamaño %d, Libre\n", i + 1, partitions[i].size);
+            } else {
+                printf("Partición %d: Tamaño %d, Ocupada por Proceso %d\n", i + 1, partitions[i].size, partitions[i].process_id);
+            }
+        }
+        printf("\n");
+    }
+
+    int main() {
+        // Definición de particiones y procesos
+        int partition_sizes[] = {100, 200, 300, 400};
+        int partition_count = 4;
+        Partition partitions[MAX_PARTITIONS];
+        initialize_partitions(partitions, partition_sizes, partition_count);
+
+        Process processes[] = {
+            {1, 120}, // Proceso 1: Tamaño 120
+            {2, 80},  // Proceso 2: Tamaño 80
+            {3, 200}, // Proceso 3: Tamaño 200
+            {4, 50}   // Proceso 4: Tamaño 50
+        };
+        int process_count = 4;
+
+        // Asignar procesos a particiones
+        for (int i = 0; i < process_count; i++) {
+            allocate_process(partitions, partition_count, processes[i]);
+        }
+
+        display_memory(partitions, partition_count);
+
+        // Liberar un proceso
+        deallocate_process(partitions, partition_count, 2);
+
+        display_memory(partitions, partition_count);
+
+        // Intentar asignar un proceso que no cabe
+        Process large_process = {5, 500};
+        allocate_process(partitions, partition_count, large_process);
+
+        display_memory(partitions, partition_count);
+
+        return 0;
+    }
+    ```
 
 
     2.2 Diseña un algoritmo para calcular qué procesos pueden ser asignados
     a un sistema con memoria real limitada utilizando el algoritmo de
     "primera cabida".
 
-       Respuesta : 
+    Respuesta : 
+
+    ```c 
+    #include <stdio.h>
+    #include <stdbool.h>
+
+    #define MAX_PARTITIONS 10
+    #define MAX_PROCESSES 10
+
+    typedef struct {
+        int size;
+        bool is_free;
+        int process_id;
+    } Partition;
+
+    typedef struct {
+        int id;
+        int size;
+        bool is_assigned;
+    } Process;
+
+    // Inicialización de particiones de memoria
+    void initialize_partitions(Partition partitions[], int sizes[], int count) {
+        for (int i = 0; i < count; i++) {
+            partitions[i].size = sizes[i];
+            partitions[i].is_free = true;
+            partitions[i].process_id = -1; // -1 indica que no hay proceso asignado
+        }
+    }
+
+    // Asignar procesos utilizando el algoritmo de primera cabida
+    void first_fit(Partition partitions[], int partition_count, Process processes[], int process_count) {
+        for (int i = 0; i < process_count; i++) {
+            processes[i].is_assigned = false; // Inicialmente, el proceso no está asignado
+            for (int j = 0; j < partition_count; j++) {
+                if (partitions[j].is_free && partitions[j].size >= processes[i].size) {
+                    partitions[j].is_free = false;
+                    partitions[j].process_id = processes[i].id;
+                    processes[i].is_assigned = true;
+                    printf("Proceso %d asignado a partición de tamaño %d.\n", processes[i].id, partitions[j].size);
+                    break; // Se detiene al encontrar la primera partición adecuada
+                }
+            }
+            if (!processes[i].is_assigned) {
+                printf("Proceso %d no pudo ser asignado.\n", processes[i].id);
+            }
+        }
+    }
+
+    // Mostrar el estado de la memoria
+    void display_memory(Partition partitions[], int partition_count) {
+        printf("\nEstado de la memoria:\n");
+        for (int i = 0; i < partition_count; i++) {
+            if (partitions[i].is_free) {
+                printf("Partición %d: Tamaño %d, Libre\n", i + 1, partitions[i].size);
+            } else {
+                printf("Partición %d: Tamaño %d, Ocupada por Proceso %d\n", i + 1, partitions[i].size, partitions[i].process_id);
+            }
+        }
+        printf("\n");
+    }
+
+    // Mostrar el estado de los procesos
+    void display_processes(Process processes[], int process_count) {
+        printf("\nEstado de los procesos:\n");
+        for (int i = 0; i < process_count; i++) {
+            if (processes[i].is_assigned) {
+                printf("Proceso %d: Tamaño %d, Asignado\n", processes[i].id, processes[i].size);
+            } else {
+                printf("Proceso %d: Tamaño %d, No asignado\n", processes[i].id, processes[i].size);
+            }
+        }
+        printf("\n");
+    }
+
+    int main() {
+        // Definición de particiones y procesos
+        int partition_sizes[] = {100, 200, 300, 400};
+        int partition_count = 4;
+        Partition partitions[MAX_PARTITIONS];
+        initialize_partitions(partitions, partition_sizes, partition_count);
+
+        Process processes[] = {
+            {1, 120}, // Proceso 1: Tamaño 120
+            {2, 80},  // Proceso 2: Tamaño 80
+            {3, 200}, // Proceso 3: Tamaño 200
+            {4, 50},  // Proceso 4: Tamaño 50
+            {5, 500}  // Proceso 5: Tamaño 500 (No cabe)
+        };
+        int process_count = 5;
+
+        // Asignar procesos usando el algoritmo de primera cabida
+        first_fit(partitions, partition_count, processes, process_count);
+
+        // Mostrar el estado de la memoria y los procesos
+        display_memory(partitions, partition_count);
+        display_processes(processes, process_count);
+
+        return 0;
+    }
+
+    ```
 
 3. **Organización de memoria virtual**
    
     3.1 Investiga y explica el concepto de "paginación" y "segmentación".
     ¿Cuáles son las ventajas y desventajas de cada técnica?
 
-       Respuesta : 
+    Respuesta :
+
+    **Paginacion :** La memoria se divide en bloques de tamaño fijo llamados páginas (en el espacio lógico del proceso) y marcos (en el espacio físico de la memoria). Cada página de un proceso puede ser mapeada a cualquier marco disponible en la memoria física, lo que permite una asignación no contigua. 
+
+    Ventajas:
+
+    Eficiencia en el uso de memoria: No hay fragmentación externa porque los marcos se llenan completamente.
+    
+    Asignación no contigua: Las páginas pueden asignarse a marcos no adyacentes, facilitando la gestión de la memoria.
+    
+    Facilidad para la multitarea: Es más fácil compartir memoria entre procesos porque las páginas pueden mapearse fácilmente.
+
+    Desventajas:
+
+    Fragmentación interna: Si el tamaño de una página no se utiliza completamente, el espacio restante queda desaprovechado.
+    
+    Sobrecarga de la tabla de páginas: La necesidad de mantener y buscar en tablas de páginas grandes puede consumir memoria adicional y tiempo de procesamiento.
+    
+    Costo del hardware: Requiere hardware adicional para la traducción de direcciones (como una unidad MMU).
+
+    
+    **Segmentacion :** La memoria se divide en bloques lógicos de tamaño variable llamados segmentos, que representan unidades funcionales del programa, como código, datos y pila. Cada segmento tiene un tamaño y propósito definidos.
+
+    Ventajas:
+
+    Representación lógica: Se alinea mejor con la estructura lógica del programa, ya que cada segmento puede representar una parte funcional (p. ej., pila, datos).
+    
+    Facilidad de crecimiento: Los segmentos pueden crecer o reducirse según las necesidades del programa, si hay espacio disponible.
+    
+    Seguridad y protección: Cada segmento puede tener permisos específicos, lo que facilita el control de acceso.
+
+    Desventajas:
+
+    Fragmentación externa: Los segmentos de tamaño variable pueden dejar huecos en la memoria cuando se liberan.
+    
+    Sobrecarga de gestión: Requiere mantener una tabla de segmentos, lo que añade complejidad.
+    
+    Asignación complicada: Encontrar espacio para un segmento grande puede ser difícil en un sistema con memoria fragmentada.
+
+
 
 
     3.2 Escribe un programa que simule una tabla de páginas para procesos
     con acceso aleatorio a memoria virtual.
 
-       Respuesta : 
+    Respuesta : 
+
+    ```c 
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <time.h>
+
+    #define MAX_PAGES 10
+    #define MAX_FRAMES 10
+
+    // Estructura para representar una entrada en la tabla de páginas
+    typedef struct {
+        int page_number;  // Número de la página
+        int frame_number; // Número del marco en la memoria física
+    } PageTableEntry;
+
+    // Genera un marco aleatorio para una página
+    int assign_random_frame(int used_frames[], int total_frames) {
+        int frame;
+        do {
+            frame = rand() % total_frames; // Generar un número de marco aleatorio
+        } while (used_frames[frame]); // Verificar si el marco ya está asignado
+        used_frames[frame] = 1; // Marcar el marco como usado
+        return frame;
+    }
+
+    // Imprime la tabla de páginas
+    void print_page_table(PageTableEntry page_table[], int page_count) {
+        printf("\nTabla de Páginas:\n");
+        printf("Página | Marco\n");
+        printf("-------|-------\n");
+        for (int i = 0; i < page_count; i++) {
+            printf("   %d   |   %d\n", page_table[i].page_number, page_table[i].frame_number);
+        }
+        printf("\n");
+    }
+
+    // Traduce una dirección virtual a física usando la tabla de páginas
+    void translate_virtual_to_physical(PageTableEntry page_table[], int page_count, int virtual_address, int page_size) {
+        int page_number = virtual_address / page_size;
+        int offset = virtual_address % page_size;
+
+        if (page_number >= page_count) {
+            printf("Error: La dirección virtual %d es inválida (fuera de rango).\n", virtual_address);
+            return;
+        }
+
+        int frame_number = page_table[page_number].frame_number;
+        int physical_address = frame_number * page_size + offset;
+
+        printf("Dirección Virtual: %d -> Dirección Física: %d (Página %d, Marco %d, Offset %d)\n",
+            virtual_address, physical_address, page_number, frame_number, offset);
+    }
+
+    int main() {
+        srand(time(NULL));
+
+        int page_count, frame_count, page_size;
+        int used_frames[MAX_FRAMES] = {0}; // Arreglo para rastrear marcos usados
+
+        // Entrada de datos
+        printf("Ingrese el número de páginas: ");
+        scanf("%d", &page_count);
+        if (page_count > MAX_PAGES) {
+            printf("Error: El número máximo de páginas es %d.\n", MAX_PAGES);
+            return 1;
+        }
+
+        printf("Ingrese el número de marcos: ");
+        scanf("%d", &frame_count);
+        if (frame_count > MAX_FRAMES) {
+            printf("Error: El número máximo de marcos es %d.\n", MAX_FRAMES);
+            return 1;
+        }
+
+        printf("Ingrese el tamaño de cada página (en bytes): ");
+        scanf("%d", &page_size);
+
+        PageTableEntry page_table[MAX_PAGES];
+
+        // Asignar marcos aleatorios a cada página
+        for (int i = 0; i < page_count; i++) {
+            page_table[i].page_number = i;
+            page_table[i].frame_number = assign_random_frame(used_frames, frame_count);
+        }
+
+        // Imprimir la tabla de páginas
+        print_page_table(page_table, page_count);
+
+        // Traducir direcciones virtuales
+        int virtual_address;
+        while (1) {
+            printf("Ingrese una dirección virtual (o -1 para salir): ");
+            scanf("%d", &virtual_address);
+
+            if (virtual_address == -1) {
+                break;
+            }
+
+            translate_virtual_to_physical(page_table, page_count, virtual_address, page_size);
+        }
+
+        printf("Simulación terminada.\n");
+        return 0;
+    }
+
+    ```
+
 
 4. **Administración de memoria virtual**    
 
@@ -1601,5 +1964,243 @@ Analizar la importancia del manejo de dispositivos en sistemas Linux.
     - ***RESUTADO***
   
        ![ejercicio](img/particionusb.png)
+
+
+
+### **Actividad Final** 
+
+#### **Sistemas de Archivos**
+
+- #### ***Ejercicio 1: Concepto y noción de archivo real y virtual***
+
+    Descripción:
+
+    Define los conceptos de archivo real y archivo virtual y explica sus diferencias.
+    Identifica ejemplos prácticos de cada tipo en sistemas operativos actuales.
+
+    Tareas:
+
+    - Define el concepto de archivo real y archivo virtual.
+
+    - Proporciona ejemplos de cómo los sistemas operativos manejan archivos
+    reales y virtuales.
+
+    - Explica un caso práctico donde un archivo virtual sea más útil que un
+    archivo real.
+
+
+- #### ***Ejercicio 2: Componentes de un sistema de archivos***
+
+    Descripción:
+
+    Investiga los componentes principales de un sistema de archivos y compáralos
+    entre dos sistemas operativos, como Linux y Windows.
+
+    Tareas:
+
+    - Identifica los componentes clave de un sistema de archivos (por ejem-
+    plo, metadatos, tablas de asignación, etc.).
+
+    - Crea un cuadro comparativo de cómo estos componentes funcionan en
+    sistemas como EXT4 y NTFS.
+
+    - Describe las ventajas y desventajas de cada sistema basado en sus
+    componentes.
+
+
+- ####  ***Ejercicio 3: Organización lógica y física de archivos***
+
+    Descripción:
+
+    Crea un esquema que muestre la organización lógica y física de un sistema
+    de archivos. Explica cómo se relacionan las estructuras lógicas con las físicas
+    en el disco.
+
+    Tareas:
+
+    - Diseña un árbol jerárquico que represente la organización lógica de
+    directorios y subdirectorios.
+
+    - Explica cómo se traduce la dirección lógica a la dirección física en el
+    disco.
+
+    - Proporciona un ejemplo práctico de cómo un archivo se almacena físi-
+    camente.
+
+
+- #### ***Ejercicio 4: Mecanismos de acceso a los archivos***
+
+    Descripción:
+
+    Simula diferentes mecanismos de acceso a archivos (secuencial, directo e
+    indexado) en un entorno práctico.
+
+    Tareas:
+
+    1. Define los diferentes mecanismos de acceso.
+   
+    2. Escribe un pseudocódigo que muestre cómo acceder a:
+    
+       -  Un archivo secuencialmente.
+      
+       - Un archivo directamente mediante su posición.
+     
+       - Un archivo utilizando un índice.
+
+    3. Compara las ventajas de cada mecanismo dependiendo del caso de uso.
+
+
+- #### ***Ejercicio 5: Modelo jerárquico y mecanismos de recuperaciónen caso de falla***
+
+    Descripción:
+
+    Diseña una estructura jerárquica para un sistema de archivos y simula un
+    escenario de falla en el sistema. Describe cómo recuperar los datos utilizando
+    mecanismos de recuperación.
+
+    Tareas:
+
+    - Diseña un modelo jerárquico para un sistema de archivos con al menos
+    tres niveles de directorios.
+
+    - Simula una falla en un directorio específico y describe los pasos nece-
+    sarios para recuperarlo.
+
+    - Explica qué herramientas o técnicas de respaldo (backup) utilizarías
+    para evitar pérdida de datos.
+
+
+#### **Protección y Seguridad**
+
+- #### ***Ejercicio 1: Concepto y objetivos de protección y seguridad***
+
+    Descripción:
+
+    Investiga los conceptos de protección y seguridad en sistemas operativos.
+    Analiza los objetivos principales que deben cumplir estos mecanismos.
+
+    Tareas:
+
+    - Define los conceptos de protección y seguridad en el contexto de sis-
+    temas operativos.
+
+    - Identifica los objetivos principales de un sistema de protección y se-
+    guridad, como confidencialidad, integridad y disponibilidad.
+
+    - Da un ejemplo práctico de cómo se aplican estos objetivos en un sistema
+    operativo.
+
+
+- #### ***Ejercicio 2: Clasificación aplicada a la seguridad***
+
+    Descripción:
+
+    Clasifica los mecanismos de seguridad en un sistema operativo y explica cómo
+    cada tipo contribuye a la protección del sistema.
+
+    Tareas:
+    
+    - Investiga las clasificaciones comunes de la seguridad, como física, lógica
+    y de red.
+
+    - Explica el papel de cada clasificación en la protección de un sistema
+    operativo.
+
+    - Proporciona ejemplos prácticos de herramientas o técnicas utilizadas
+    en cada clasificación.
+
+
+- #### ***Ejercicio 3: Funciones del sistema de protección***
+  
+    Descripción:
+
+    Analiza las funciones que cumple un sistema de protección en un entorno
+    multiusuario.
+
+    Tareas:
+
+    - Describe cómo un sistema de protección controla el acceso a los recur-
+    sos.
+
+    - Explica las funciones principales como autenticación, autorización y
+    auditoría.
+
+    - Diseña un caso práctico donde se muestren las funciones de un sistema
+    de protección en acción.
+
+
+- #### ***Ejercicio 4: Implantación de matrices de acceso***
+  
+    Descripción:
+
+    Crea e implementa una matriz de acceso para un sistema que contiene usuar-
+    ios y recursos con diferentes niveles de permisos.
+
+    Tareas:
+
+    - Diseña una matriz de acceso para un sistema con al menos 3 usuarios
+    y 4 recursos.
+
+    - Explica cómo esta matriz se utiliza para controlar el acceso en un
+    sistema operativo.
+
+    - Simula un escenario donde un usuario intenta acceder a un recurso no
+    permitido y cómo la matriz lo bloquea.
+
+
+- #### ***Ejercicio 5: Protección basada en el lenguaje***
+  
+    Descripción:
+
+    Investiga cómo los lenguajes de programación pueden implementar mecan-
+    ismos de protección.
+
+    Tareas:
+
+    - Explica el concepto de protección basada en el lenguaje.
+  
+    - Proporciona un ejemplo de cómo un lenguaje como Java o Rust asegura
+    la memoria y evita accesos no autorizados.
+
+    - Compara este enfoque con otros mecanismos de protección en sistemas
+    operativos.
+
+
+- #### ***Ejercicio 6: Validación y amenazas al sistema***
+  
+    Descripción:
+
+    Analiza las principales amenazas a un sistema operativo y los mecanismos
+    de validación utilizados para prevenirlas.
+
+    Tareas:
+
+    - Investiga y describe al menos tres tipos de amenazas comunes (por
+    ejemplo, malware, ataques de fuerza bruta, inyección de código).
+
+    - Explica los mecanismos de validación como autenticación multifactor
+    y control de integridad.
+
+    - Diseña un esquema de validación para un sistema operativo con múlti-
+    ples usuarios.
+
+
+- #### ***Ejercicio 7: Cifrado***
+  
+    Descripción:
+
+    Explora cómo los mecanismos de cifrado protegen la información en un sis-
+    tema operativo.
+
+    Tareas:
+
+    - Define los conceptos de cifrado simétrico y asimétrico.
+  
+    - Proporciona un ejemplo práctico de cada tipo de cifrado aplicado en
+    sistemas operativos.
+
+    - Simula el proceso de cifrado y descifrado de un archivo con una clave
+    dada.
+
 
 
